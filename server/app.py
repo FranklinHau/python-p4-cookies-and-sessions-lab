@@ -22,8 +22,7 @@ def clear_session():
 
 @app.route('/articles')
 def index_articles():
-
-    pass
+    return jsonify({'message': 'Endpoint not implemented yet'}), 501
 
 @app.route('/articles/<int:id>')
 def show_article(id):
