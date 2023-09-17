@@ -27,8 +27,25 @@ def index_articles():
 
 @app.route('/articles/<int:id>')
 def show_article(id):
+    session['page_views'] = session.get('page_views', 0) + 1
 
-    pass
+    if session['page_views'] > 3:
+        return jsonify({'message': 'Maximum pageview limit reached'}), 401
+    
+    article = Article.query.get(id)
+
+    if not article:
+        return jsonify({'message': 'Article not found'}), 404
+    
+    return jsonify({
+        'author': article.author,
+        'title': article.title,
+        'content': article.content,
+        'preview': article.preview,
+        'minutes_to_read': article.minutes_to_read,
+        'date': article.date.strftime('%Y-%m-%d %H:%M:%S')  # Assuming date is a datetime object
+    }), 200
+
 
 if __name__ == '__main__':
     app.run(port=5555)
